@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Stopwatch</title>
+  <style>
+    body {font-family: Arial, sans-serif; text-align: center; margin-top: 50px;}
+    #time {font-size: 3rem;}
+    button {font-size: 1.2rem; margin: 5px; padding: 10px 20px;}
+  </style>
+</head>
+<body>
+  <h1>Stopwatch</h1>
+  <div id="time">00:00:00.0</div>
+  <button id="start">Start</button>
+  <button id="stop">Stop</button>
+  <button id="reset">Reset</button>
+
+  <script>
+    let startTime = 0;
+    let elapsed = 0;
+    let timerInterval;
+    const timeDisplay = document.getElementById('time');
+    const startBtn = document.getElementById('start');
+    const stopBtn = document.getElementById('stop');
+    const resetBtn = document.getElementById('reset');
+
+    function formatTime(ms) {
+      const totalSeconds = Math.floor(ms / 1000);
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      const tenths = Math.floor((ms % 1000) / 100);
+      return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}.${tenths}`;
+    }
+
+    startBtn.onclick = () => {
+      if (!timerInterval) {
+        startTime = Date.now() - elapsed;
+        timerInterval = setInterval(() => {
+          elapsed = Date.now() - startTime;
+          timeDisplay.textContent = formatTime(elapsed);
+        }, 100);
+      }
+    };
+
+    stopBtn.onclick = () => {
+      clearInterval(timerInterval);
+      timerInterval = null;
+    };
+
+    resetBtn.onclick = () => {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      elapsed = 0;
+      timeDisplay.textContent = '00:00.0';
+    };
+  </script>
+</body>
+</html>
